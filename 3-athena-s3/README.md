@@ -1,5 +1,5 @@
 ### Athena
-1. It provides SQL interface to query structured data - eg: CSV, parquet - on S3. It can handle Big Data.
+1. It provides SQL interface to query data - eg: CSV, parquet - on S3. It can handle Big Data.
 2. It uses Presto (most queries), Hive (for few DDL operations) and spawns jobs on EMR for incoming requests.
 
 ### What is this?
