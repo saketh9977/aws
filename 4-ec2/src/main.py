@@ -201,10 +201,18 @@ def main():
     undesired_state_list = ['ConnectionLost', 'Inactive']
     wait_for_ssm_agent(ssm_client, instance_id, desired_state_list, undesired_state_list, 5)
 
+    # command_list = [
+    #     'date',
+    #     'pwd',
+    #     'aws s3 ls s3://test-4323/',
+    #     'date'
+    # ]
     command_list = [
         'date',
         'pwd',
-        'aws s3 ls s3://test-4323/',
+        'aws s3 cp s3://test-4323/ssm_test.sh .',
+        'bash ssm_test.sh',
+        'pwd',
         'date'
     ]
     command_id = execute_commands_on_ec2(ssm_client, command_list, instance_id)
