@@ -40,9 +40,7 @@ def launch_ec2(ec2_client):
     # pprint.pprint(response)
     return response['Instances'][0]['InstanceId']
 
-def poll_ec2_launch(ec2_client, instance_id):
-
-    poll_delay = 10 # seconds
+def poll_ec2_status(ec2_client, instance_id, desired_state_list, undesired_state_list, poll_freq_in_sec):
 
     while True:
 
@@ -56,24 +54,47 @@ def poll_ec2_launch(ec2_client, instance_id):
             raise(f'instance id = {instance_id} is missing in response')
         
         status = response['Reservations'][0]['Instances'][0]['State']['Name']
-        print___(f'status = {status}')
+        print___(f'instance id = {instance_id}, status = {status}')
 
-        if status in ['terminated', 'stopped']:
-            raise(f'instance {status}')
+        if status in undesired_state_list:
+            raise(f'instance id = {instance_id}, status = {status}')
 
-        if status == 'running':
+        if status in desired_state_list:
             return status
 
-        print___(f'sleeping for {poll_delay}s...')
-        time.sleep(poll_delay)
+        print___(f'sleeping for {poll_freq_in_sec}s...')
+        time.sleep(poll_freq_in_sec)
         print___('awake')
+
+def terminate_ec2(ec2_client, instance_id):
+    print___(f"terminating ec2 with instance id = {instance_id}...")
+
+    response = ec2_client.terminate_instances(
+        InstanceIds=[instance_id]
+    )
+
+    # pprint.pprint(response)
+    print___(f'triggered termination of ec2 with instance id = {instance_id}')
 
 def main():
     print___('main: starting...')
 
     ec2_client = boto3.client('ec2', region_name='us-east-1') 
     instance_id = launch_ec2(ec2_client)
-    poll_ec2_launch(ec2_client, instance_id)
+
+    desired_state_list = ['running']
+    undesired_state_list = ['terminated', 'stopped']
+    poll_ec2_status(ec2_client, instance_id, desired_state_list, undesired_state_list, 10)
+
+    
+
+    terminate_ec2(ec2_client, instance_id)
+
+    desired_state_list = ['terminated']
+    undesired_state_list = ['running', 'stopped']
+    poll_ec2_status(ec2_client, instance_id, desired_state_list, undesired_state_list, 10)
+
+
     print___('main: ending...')
 
 if __name__ == '__main__':
