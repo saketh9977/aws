@@ -1,0 +1,6 @@
+1. create ECS cluster using AWS console (ec2 based, not fargate, arm64 based)
+2. on left-hand-side-panel on AWS console, select Task definitions -> create new task definition (ec2 based, not fargate, arm64)
+3. ensure cloudwatch, ecr policies are in IAM role of task & ecs-tasks should be trusted entity (ecs-tasks should be able to assume this role) https://stackoverflow.com/a/71664734/8279892
+4. get inside cluster on AWS console, go to Tasks tab, Click 'Run New Task' (attach above IAM role)
+5. monitor running task: ECS cluster -> Tasks tab
+
