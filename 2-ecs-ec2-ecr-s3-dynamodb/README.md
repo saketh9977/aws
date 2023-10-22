@@ -6,7 +6,7 @@
     - district
     - state
     - country
-3. The transformed data along with timestamp is stored in DynamoDB
+3. Above attributes along with timestamp are stored in DynamoDB
 4. It uses an ECS cluster with an EC2 instance which pulls docker image from ECR.
 
 # How to test it locally?
