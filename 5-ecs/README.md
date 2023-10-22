@@ -1,4 +1,4 @@
-### Usecase
+### What is this?
 Package your ETL in a docker image and run your ETL docker container on AWS ECS as a task
 
 ### Local Testing & Deployment:
